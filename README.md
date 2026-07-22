@@ -64,7 +64,7 @@ If QA finds issues, the pipeline loops back to step 6 automatically.
 ## Setup
 
 ```bash
-git clone https://github.com/your-username/swarmforge.git
+git clone https://github.com/Sh3rm/swarmforge.git
 cd swarmforge
 ```
 
