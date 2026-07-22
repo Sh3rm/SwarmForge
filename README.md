@@ -88,7 +88,6 @@ Open `.agents/mcp_config.json` and change the path to your own projects director
 ```
 swarmforge/
 ├── GEMINI.md                          # Orchestrator system prompt
-├── MEMORY.md                          # Persistent lessons & preferences
 ├── README.md
 ├── .gitignore
 └── .agents/

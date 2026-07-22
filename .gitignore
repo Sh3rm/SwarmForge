@@ -16,7 +16,7 @@ scratch/
 .agents/model-list.txt
 
 # Personal Memory (Uncomment to prevent pushing your agent's private memories)
-# MEMORY.md
+MEMORY.md
 
 # Python/Environment (if custom tool-smith scripts generate them)
 __pycache__/
