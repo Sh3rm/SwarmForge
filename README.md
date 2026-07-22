@@ -55,20 +55,24 @@ If QA finds issues, the pipeline loops back to step 6 automatically.
 
 > "Default Tier" is a fallback. The orchestrator overrides these at runtime based on the live `agy models` list.
 
-## Prerequisites
+## 🚀 Quick Start
+
+SwarmForge is powered by the [Antigravity (`agy`)](https://antigravity.google) engine.
+
+**1. Prerequisites:**
 
 - **[Antigravity CLI (`agy`)](https://antigravity.google)** — installed and authenticated
 - **Node.js** — for `npx` (Filesystem MCP server)
 - **[uv](https://docs.astral.sh/uv/)** — for `uvx` (DuckDuckGo MCP server)
 
-## Setup
+**2. Clone this repository:**
 
 ```bash
 git clone https://github.com/Sh3rm/swarmforge.git
 cd swarmforge
 ```
 
-**Configure filesystem access:**
+**3. Configure filesystem access:**
 
 Open `.agents/mcp_config.json` and change the path to your own projects directory:
 
@@ -81,7 +85,15 @@ Open `.agents/mcp_config.json` and change the path to your own projects director
 
 > ⚠️ Do not set this to `/` or `C:\`. This path defines where AI agents can read and write files.
 
-**Model configuration is automatic.** The `model` fields in skill files are fallback defaults. At runtime, the orchestrator runs `agy models`, reads the output, and dynamically assigns the best available model to each sub-agent based on task complexity. You don't need to edit model names manually.
+**4. Boot the swarm:**
+
+```bash
+agy "Build me a Kubernetes monitoring swarm with Prometheus and Grafana integration"
+```
+
+That's it. SwarmForge will research the domain, architect the agent hierarchy, write every prompt and config file, validate the output, and deliver a working swarm into your target directory.
+
+> **Model configuration is automatic.** The `model` fields in skill files are fallback defaults. At runtime, the orchestrator runs `agy models`, reads the output, and dynamically assigns the best available model to each sub-agent based on task complexity. You don't need to edit model names manually.
 
 ## Project Structure
 
