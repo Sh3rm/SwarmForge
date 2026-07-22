@@ -68,8 +68,8 @@ SwarmForge is powered by the [Antigravity (`agy`)](https://antigravity.google) e
 **2. Clone this repository:**
 
 ```bash
-git clone https://github.com/Sh3rm/swarmforge.git
-cd swarmforge
+git clone https://github.com/Sh3rm/SwarmForge.git
+cd SwarmForge
 ```
 
 **3. Configure filesystem access:**
@@ -98,7 +98,7 @@ That's it. SwarmForge will research the domain, architect the agent hierarchy, w
 ## Project Structure
 
 ```
-swarmforge/
+SwarmForge/
 ├── AGENTS.md                          # Orchestrator system prompt
 ├── README.md
 ├── .gitignore
