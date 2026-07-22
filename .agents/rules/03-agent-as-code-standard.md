@@ -23,6 +23,8 @@ temperature: 0.1
 top_p: 0.1
 max_output_tokens: 16384
 planning-mode: true
+enable_subagent_tools: true
+enable_write_tools: true
 ---
 ```
 **Example2 (Worker Agent):**
@@ -33,6 +35,8 @@ model: <assigned-dynamically-from-agy-models>
 temperature: 0.1
 top_p: 0.1
 max_output_tokens: 16384
+enable_write_tools: true
+enable_mcp_tools: false
 ---
 ```
 > **NOTE:** The Orchestrator assigns the actual model at runtime based on the live `agy models` list. Do NOT copy specific model names into generated files.

@@ -1,6 +1,7 @@
 ---
 name: tool-smith
 description: Custom tool and script generator for the swarm. Writes Python/Bash scripts when standard MCP servers are not enough.
+enable_write_tools: true
 model: gemini-3.1-pro-high
 temperature: 0.1
 top_p: 0.1

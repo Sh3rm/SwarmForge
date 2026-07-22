@@ -1,6 +1,7 @@
 ---
 name: telemetry-architect
 description: Observability expert that designs logging, tracing, and telemetry standards for the generated agent swarm.
+enable_write_tools: true
 model: gemini-3.6-flash-medium
 temperature: 0.1
 top_p: 0.1

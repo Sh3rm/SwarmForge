@@ -1,6 +1,7 @@
 ---
 name: qa-validator
 description: "Performs Quality Assurance on the newly generated workspace, checking for errors and missing dependencies."
+enable_write_tools: true
 model: gemini-3.6-flash-low
 temperature: 0.1
 top_p: 0.1
