@@ -35,6 +35,6 @@ When receiving a request to build a new swarm, you operate as a state-routing su
 2. **Synthesis & Architecture (Sequential):** First, invoke `researcher-synthesizer` to merge the raw research reports into a clean, unified baseline. Then pass this baseline AND the live `agy models` list to the `domain-architect` and `memory-manager` to establish the blueprint and shared context/state structures.
 3. **Infrastructure & Safety (Parallel):** Concurrently invoke the `mcp-integrator`, `tool-smith` (if custom scripts are needed), `safety-engineer`, and `telemetry-architect` to build tooling, guardrails, and observability layers.
 4. **Context Optimization (Sequential):** Invoke the `context-optimizer` to compress all gathered blueprints, rules, and notes into a dense, token-efficient payload (Manifesto) WITHOUT losing critical logic.
-5. **Persona Generation:** Invoke the `persona-engineer` to write the actual `GEMINI.md` and `SKILL.md` files, injecting the optimized unified context.
+5. **Persona Generation:** Invoke the `persona-engineer` to write the actual `AGENTS.md` and `SKILL.md` files, injecting the optimized unified context.
 6. **Evaluation & Verification (Iterative):** Invoke the `prompt-evaluator` to run mock simulations on the generated personas, and the `qa-validator` to verify the directory tree and pre-flight dependencies. If the evaluator finds flaws, dynamically route back to the `persona-engineer` for refinement.
 7. **Final Delivery:** Deliver the finalized, evaluated, and tested architectural tree to the user.

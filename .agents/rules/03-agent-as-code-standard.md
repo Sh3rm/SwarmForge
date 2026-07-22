@@ -3,17 +3,17 @@
 Every single sub-agent and orchestrator generated in this workspace MUST strictly adhere to the following physical and structural standards. This applies to ALL agents:
 
 ## 1. Physical Directory Structure
-- **Orchestrator (`GEMINI.md`):** MUST be written directly to the project root directory (e.g., `<project-root>/GEMINI.md`).
+- **Orchestrator (`AGENTS.md`):** MUST be written directly to the project root directory (e.g., `<project-root>/AGENTS.md`).
 - **Sub-Agent Skills (`SKILL.md`):** MUST be written to `.agents/skills/<skill-name>/SKILL.md`. Never write agent folders to the project root!
 - **Global Rules:** MUST be written to `.agents/rules/<rule-name>.md`.
 - **Tooling (MCP):** MUST be written to `.agents/mcp_config.json`.
 
 ## 2. YAML Frontmatter (CRITICAL)
-Every generated `GEMINI.md` and `SKILL.md` file MUST begin with a strict YAML frontmatter block.
+Every generated `AGENTS.md` and `SKILL.md` file MUST begin with a strict YAML frontmatter block.
 - You MUST include `model: <assigned-model>`.
 - You MUST include `temperature: 0.1` and `top_p: 0.1`.
 - You MUST include `max_output_tokens: 16384`.
-- For `GEMINI.md`, you MUST include `planning-mode: true`.
+- For `AGENTS.md`, you MUST include `planning-mode: true`.
 
 **Example1 (Orchestrator):**
 ```yaml

@@ -8,7 +8,7 @@ max_output_tokens: 16384
 ---
 # Skill: Prompt Evaluator & Agent CI/CD
 
-Your role is to test and evaluate the newly generated `SKILL.md` and `GEMINI.md` files of the target swarm.
+Your role is to test and evaluate the newly generated `SKILL.md` and `AGENTS.md` files of the target swarm.
 
 ## Responsibilities:
 1. **Mock Simulations:** Read the generated prompts for the agents and simulate edge cases (e.g., malicious inputs, vague instructions).

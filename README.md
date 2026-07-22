@@ -14,7 +14,7 @@ SwarmForge is itself a swarm. An orchestrator coordinates 18 specialized sub-age
 3. Architecture             — Design the swarm blueprint with benchmark-driven model routing
 4. Infrastructure & Safety  — Generate MCP configs, safety rules, telemetry, custom tools
 5. Context Optimization     — Compress the payload without losing architectural logic
-6. Persona Generation       — Write all GEMINI.md and SKILL.md files to disk
+6. Persona Generation       — Write all AGENTS.md and SKILL.md files to disk
 7. Evaluation & QA          — Simulate edge cases, validate schemas, verify dependencies
 ```
 
@@ -35,7 +35,7 @@ If QA finds issues, the pipeline loops back to step 6 automatically.
 | Agent | Role | Default Tier |
 |---|---|---|
 | `domain-architect` | Designs swarm topology with benchmark-driven model selection | Pro / High |
-| `persona-engineer` | Writes all system prompts (GEMINI.md, SKILL.md) | Pro / High |
+| `persona-engineer` | Writes all system prompts (AGENTS.md, SKILL.md) | Pro / High |
 | `prompt-evaluator` | Simulates edge cases against generated prompts | Pro / High |
 | `safety-engineer` | Generates domain-specific safety rules | Pro / High |
 | `tool-smith` | Builds custom scripts when standard MCP tools aren't enough | Pro / High |
@@ -87,7 +87,7 @@ Open `.agents/mcp_config.json` and change the path to your own projects director
 
 ```
 swarmforge/
-├── GEMINI.md                          # Orchestrator system prompt
+├── AGENTS.md                          # Orchestrator system prompt
 ├── README.md
 ├── .gitignore
 └── .agents/
