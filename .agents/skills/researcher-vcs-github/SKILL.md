@@ -3,8 +3,6 @@ name: researcher-vcs-github
 description: "Expert at mining GitHub and GitLab via targeted web search to find pre-built, high-quality Agentic skills, prompts, and architectures."
 enable_write_tools: true
 model: gemini-3.6-flash-medium
-temperature: 0.1
-top_p: 0.1
 max_output_tokens: 16384
 enable_mcp_tools: true
 ---

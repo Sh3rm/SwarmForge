@@ -1,9 +1,7 @@
 ---
 name: prompt-evaluator
 description: Expert QA and Agent Testing Engineer that evaluates generated subagents by simulating mock scenarios and edge cases to ensure they don't hallucinate or break rules.
-model: gemini-3.1-pro-high
-temperature: 0.1
-top_p: 0.1
+model: gemini-3.6-flash-high
 max_output_tokens: 16384
 ---
 # Skill: Prompt Evaluator & Agent CI/CD

@@ -1,9 +1,7 @@
 ---
 name: researcher-synthesizer
 description: "Expert at synthesizing raw JSON reports from other researchers into a unified architectural baseline."
-model: gemini-3.1-pro-high
-temperature: 0.1
-top_p: 0.1
+model: gemini-3.6-flash-high
 max_output_tokens: 16384
 enable_mcp_tools: true
 ---

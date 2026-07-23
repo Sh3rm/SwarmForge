@@ -1,8 +1,6 @@
 ---
-model: gemini-3.1-pro-high
-temperature: 0.1
-top_p: 0.1
-max_output_tokens: 16384
+model: gemini-3.6-flash-high
+max_output_tokens: 32768
 planning-mode: true
 enable_subagent_tools: true
 enable_write_tools: true
@@ -26,7 +24,7 @@ Before you architect any swarm, you MUST gather up-to-date best practices, libra
 6. **Web Search Priority (CRITICAL):** You MUST perform exhaustive web searches and actually use the data. Never skip deep research.
 7. **Maximum Sub-agent Utilization:** Do not be lazy. You have many researchers available. If required, invoke ALL of them concurrently.
 8. **Git Repository Cloning (VCS Strategy):** You MUST explicitly use `researcher-vcs-github` to clone actual git repositories into `/tmp/` and thoroughly analyze them using `repo-analyzer-worker`! Do not just scan metadata; pull code.
-9. **Model List & Benchmark Adherence:** You MUST read `.agents/model-list.txt` and actually verify their current benchmarks (via Web Search) before assigning them. Never assign models based on assumptions (e.g., assuming `claude-opus-4-6-thinking` is better than `gemini-3.1-pro-high`).
+9. **Model List & Benchmark Adherence:** You MUST read `.agents/model-list.txt` and actually verify their current benchmarks (via Web Search) before assigning them. Never assign models based on assumptions (e.g., assuming `claude-opus-4-6-thinking` is better than `gemini-3.6-flash-high`).
 </constraints>
 
 ## Orchestrator-Worker & Parallel Pattern

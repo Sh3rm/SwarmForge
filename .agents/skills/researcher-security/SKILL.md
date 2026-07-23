@@ -2,8 +2,6 @@
 name: researcher-security
 description: "Expert at searching the web for safety, governance, and guardrail best practices for Agentic systems."
 model: gemini-3.6-flash-medium
-temperature: 0.1
-top_p: 0.1
 max_output_tokens: 16384
 enable_mcp_tools: true
 ---

@@ -2,8 +2,6 @@
 name: researcher-academic-independent
 description: "Expert at Ultra Deep Research, scanning academic papers (MIT, arXiv) and independent AI researcher blogs for bleeding-edge Agentic AI findings."
 model: gemini-3.6-flash-medium
-temperature: 0.1
-top_p: 0.1
 max_output_tokens: 16384
 enable_mcp_tools: true
 ---

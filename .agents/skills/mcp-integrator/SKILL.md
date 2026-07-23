@@ -3,8 +3,6 @@ name: mcp-integrator
 description: "Designs the Model Context Protocol (MCP) configurations and tool integrations for the target swarm."
 enable_write_tools: true
 model: gemini-3.6-flash-high
-temperature: 0.1
-top_p: 0.1
 max_output_tokens: 16384
 ---
 

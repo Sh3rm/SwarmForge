@@ -11,7 +11,6 @@ Every single sub-agent and orchestrator generated in this workspace MUST strictl
 ## 2. YAML Frontmatter (CRITICAL)
 Every generated `AGENTS.md` and `SKILL.md` file MUST begin with a strict YAML frontmatter block.
 - You MUST include `model: <assigned-model>`.
-- You MUST include `temperature: 0.1` and `top_p: 0.1`.
 - You MUST include `max_output_tokens: 16384`.
 - For `AGENTS.md`, you MUST include `planning-mode: true`.
 
@@ -19,8 +18,6 @@ Every generated `AGENTS.md` and `SKILL.md` file MUST begin with a strict YAML fr
 ```yaml
 ---
 model: <assigned-dynamically-from-agy-models>
-temperature: 0.1
-top_p: 0.1
 max_output_tokens: 16384
 planning-mode: true
 enable_subagent_tools: true
@@ -32,11 +29,9 @@ enable_write_tools: true
 ---
 name: agent-name
 model: <assigned-dynamically-from-agy-models>
-temperature: 0.1
-top_p: 0.1
-max_output_tokens: 16384
+max_output_tokens: 8192
 enable_write_tools: true
-enable_mcp_tools: false
+enable_mcp_tools: true
 ---
 ```
 > **NOTE:** The Orchestrator assigns the actual model at runtime based on the live `agy models` list. Do NOT copy specific model names into generated files.
@@ -45,7 +40,7 @@ enable_mcp_tools: false
 Do NOT output massive markdown templates inside JSON strings when communicating. If your job is to generate a file, write it directly to the disk using filesystem tools.
 
 ## 4. Dynamic Model Routing (Future-Proof Optimization)
-Google updates models constantly. Do NOT hardcode model names (like `gemini-3.1-pro-high`) in your architectural designs. The Orchestrator MUST fetch the live list via `agy models` and route tasks dynamically:
+Google updates models constantly. Do NOT hardcode model names (like `gemini-3.6-flash-high`) in your architectural designs. The Orchestrator MUST fetch the live list via `agy models` and route tasks dynamically:
 - **Heavy Reasoning (High Effort/Thinking):** Assign to top-tier models (e.g., latest Pro or Claude Thinking variants) for `domain-architect`, `persona-engineer`, etc.
 - **Data Synthesis (Medium Effort):** Assign to balanced models (e.g., Flash Medium variants) for research synthesis or context integration.
 - **Fast Parsing (Low Effort):** Assign to fastest/cheapest models (e.g., Flash Low variants) for rapid scanning (`qa-validator`, `repo-analyzer-worker`).

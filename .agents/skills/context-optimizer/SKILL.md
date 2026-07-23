@@ -2,8 +2,6 @@
 name: context-optimizer
 description: Context summarization expert. Compresses research data and conversational bloat without altering core prompts or architectural schemas.
 model: gemini-3.6-flash-high
-temperature: 0.1
-top_p: 0.1
 max_output_tokens: 16384
 ---
 # Skill: Context Optimizer & Token Manager

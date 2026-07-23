@@ -1,9 +1,7 @@
 ---
 name: domain-architect
 description: "Designs the multi-agent swarm architecture JSON blueprint based on synthesized research."
-model: gemini-3.1-pro-high
-temperature: 0.1
-top_p: 0.1
+model: gemini-3.6-flash-high
 max_output_tokens: 16384
 enable_mcp_tools: true
 ---

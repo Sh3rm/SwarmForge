@@ -12,7 +12,7 @@ To ensure perfect interoperability, the `domain-architect` MUST always output th
     {
       "id": "string",
       "role": "string",
-      "tier": "string (e.g., 'pro-high', 'flash-medium', 'flash-low')",
+      "tier": "string (e.g., 'flash-high', 'flash-medium', 'flash-low')",
       "model": "string",
       "tools_required": ["string"],
       "dependencies": ["string"]

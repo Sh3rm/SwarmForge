@@ -2,9 +2,7 @@
 name: persona-engineer
 description: "Expert Prompt Engineer that generates Markdown content for AGENTS.md, RULE.md, and sub-agent SKILL.md files."
 enable_write_tools: true
-model: gemini-3.1-pro-high
-temperature: 0.1
-top_p: 0.1
+model: gemini-3.6-flash-high
 max_output_tokens: 16384
 ---
 
@@ -20,7 +18,7 @@ Your role is to write the system prompts for the new swarm.
 3. **YAML Frontmatter & Tool Capabilities (CRITICAL STRUCTURAL REQUIREMENT):** Every single file you write (`AGENTS.md` and `SKILL.md`) MUST begin with a valid YAML frontmatter block bounded by `---`. 
    - You MUST ALWAYS add the appropriate tool capabilities: `enable_mcp_tools: true` for researchers, `enable_write_tools: true` for workers, and `enable_subagent_tools: true` for the orchestrator (`AGENTS.md`).
    - You MUST include `model:` assigned according to the strict Model Routing Doctrine.
-   - You MUST include `temperature: 0.1`, `top_p: 0.1`, and `max_output_tokens: 16384`.
+   - You MUST include `max_output_tokens: 16384`.
    - For `AGENTS.md`, you MUST include `planning-mode: true`.
    - Failure to include these capabilities will paralyze the agents!
 4. **Write to Disk (CRITICAL PATHS & DIRECTORIES):** Write the generated markdown files directly to the host machine using your write tools. **You MUST ensure the target directories exist before writing!** 

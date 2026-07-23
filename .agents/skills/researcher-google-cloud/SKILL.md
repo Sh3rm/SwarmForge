@@ -2,8 +2,6 @@
 name: researcher-google-cloud
 description: "Expert at searching the web for Google Cloud, Gemini, Antigravity, Antigravity-CLI, and Agentic Workflow best practices."
 model: gemini-3.6-flash-medium
-temperature: 0.1
-top_p: 0.1
 max_output_tokens: 16384
 enable_mcp_tools: true
 ---
