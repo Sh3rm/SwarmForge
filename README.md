@@ -1,12 +1,16 @@
-# SwarmForge
+# 🐝 SwarmForge
+
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+[![Powered by](https://img.shields.io/badge/Powered_by-Antigravity_CLI-black.svg)](https://antigravity.google)
+[![Agents](https://img.shields.io/badge/Sub--Agents-19-orange.svg)](#agent-roster)
 
 A meta-agent system that designs and generates production-ready multi-agent swarms. Built for the [Google Antigravity (`agy`)](https://antigravity.google) CLI ecosystem.
 
-You describe what you need. SwarmForge researches the domain, architects the agent hierarchy, writes every prompt and config file, validates the output, and delivers a working swarm — ready to run with `agy`.
+You describe what you need. SwarmForge researches the domain, architects the agent hierarchy, writes every prompt and config file, validates the topology, and delivers a working swarm — ready to run with `agy`.
 
 ## How It Works
 
-SwarmForge is itself a swarm. An orchestrator coordinates 18 specialized sub-agents through a 7-step pipeline:
+SwarmForge is itself a swarm. An orchestrator coordinates 19 specialized sub-agents through a 7-step pipeline:
 
 ```
 1. Information Gathering    — Fetch live model list, spawn domain researchers in parallel
@@ -15,10 +19,10 @@ SwarmForge is itself a swarm. An orchestrator coordinates 18 specialized sub-age
 4. Infrastructure & Safety  — Generate MCP configs, safety rules, telemetry, custom tools
 5. Context Optimization     — Compress the payload without losing architectural logic
 6. Persona Generation       — Write all AGENTS.md and SKILL.md files to disk
-7. Evaluation & QA          — Simulate edge cases, validate schemas, verify dependencies
+7. Evaluation & QA          — Simulate edge cases, validate DAG topology, verify dependencies
 ```
 
-If QA finds issues, the pipeline loops back to step 6 automatically.
+If QA or DAG validation finds issues, the pipeline loops back for refinement automatically.
 
 ## Key Design Decisions
 
@@ -50,6 +54,7 @@ If QA finds issues, the pipeline loops back to step 6 automatically.
 | `researcher-academic-independent` | arXiv, independent AI research blogs | Flash / Medium |
 | `researcher-vcs-github` | Mines GitHub/GitLab for existing agent configs | Flash / Medium |
 | `researcher-synthesizer` | Merges all research into a single baseline | Pro / High |
+| `dag-validator` | Validates swarm topology — detects cycles, orphan skills, broken links | Flash / High |
 | `repo-analyzer-worker` | Fast concurrent scanning of cloned repos | Flash / Low |
 | `qa-validator` | Schema validation, dependency checks, pass/fail reporting | Flash / Low |
 
@@ -115,6 +120,7 @@ SwarmForge/
     │   └── 08-blueprint-schema.md
     └── skills/
         ├── context-optimizer/
+        ├── dag-validator/
         ├── domain-architect/
         ├── mcp-integrator/
         ├── memory-manager/
@@ -146,6 +152,10 @@ All agents (both SwarmForge's own and any it generates) operate under 8 global r
 6. **Human-in-the-Loop** — Agents pause and ask when facing critical ambiguity
 7. **Conflict Resolution** — Orchestrator resolves inter-agent disagreements; safety wins by default
 8. **Blueprint Schema** — Enforced JSON structure for all swarm blueprints
+
+## Contributing
+
+Contributions are welcome. If you have ideas for new agent types, improved safety rules, or better research strategies, feel free to open an issue or submit a pull request.
 
 ## License
 
