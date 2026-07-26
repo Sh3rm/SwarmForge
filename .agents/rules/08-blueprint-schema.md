@@ -17,8 +17,7 @@ To ensure perfect interoperability, the `domain-architect` MUST always output th
     {
       "id": "string",
       "role": "string",
-      "tier": "string ('inherit', 'flash', or 'pro' — Antigravity tier abstraction, never full model slugs)",
-      "model": "string",
+      "model": "string ('inherit', 'flash', or 'pro' — Antigravity tier abstraction, never full model slugs; maps 1:1 to the agent frontmatter `model` key)",
       "tools_required": ["string"],
       "dependencies": ["string"]
     }
