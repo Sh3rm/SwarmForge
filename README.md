@@ -32,7 +32,7 @@ If QA or DAG validation finds issues, the pipeline loops back for refinement aut
 
 - **Team, Not Product.** When you ask for a swarm that builds something, the generated agents are the development *team* (developer, tester, reviewer roles) — never the product's own runtime components role-playing as agents. Ghost infrastructure, template stamping, and tool-wrapper agents are detected and rejected by the evaluation phase.
 
-- **Dynamic Model Routing.** Agent frontmatter uses Antigravity's tier abstraction (`model: inherit | flash | pro`) instead of hardcoded model names, with `/effort` as the orthogonal reasoning-depth axis. SwarmForge runs `agy models` at the start of every job and verifies current benchmarks via live web search — tier names are marketing, benchmarks are truth.
+- **Dynamic Model Routing.** Agent frontmatter uses Antigravity's tier abstraction (`model: inherit | flash | pro`) instead of hardcoded model names, with `/effort` as the orthogonal reasoning-depth axis. The live roster comes from `.agents/model-list.txt` (operator-generated — see Quick Start) and current benchmarks are verified via live web search at the start of every job — tier names are marketing, benchmarks are truth.
 
 - **Structural Safety.** Guardrails are enforced in frontmatter, not just prose: least-privilege `tools:` allowlists, `commandExecutionPolicy: off` for agents with no business running commands, `sandbox` for the rest, and scoped MCP access via `inheritMcp`.
 
@@ -98,7 +98,15 @@ Open `.agents/mcp_config.json` and change the path to your own projects director
 
 > ⚠️ Do not set this to `/` or `C:\`. This path defines where AI agents can read and write files.
 
-**4. Boot the swarm:**
+**4. Generate your model roster (required before each session where your model lineup may have changed):**
+
+```bash
+agy models < /dev/null > .agents/model-list.txt
+```
+
+> This must run in your own terminal, **outside** an agy session. The orchestrator reads this file because nested `agy` invocations crash inside Antigravity's command sandbox. The file is gitignored — every user has a different model lineup.
+
+**5. Boot the swarm:**
 
 ```bash
 agy "Build me a Kubernetes monitoring swarm with Prometheus and Grafana integration"
