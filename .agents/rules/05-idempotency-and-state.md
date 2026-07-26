@@ -1,3 +1,8 @@
+---
+trigger: model_decision
+description: Apply before any file write, API call, or state-changing system command, and when recovering from a mid-task failure.
+---
+
 # Global Rule: Idempotency & State Safety
 
 All agents MUST ensure that their actions (especially file writes, API calls, and system commands) are idempotent and state-safe.

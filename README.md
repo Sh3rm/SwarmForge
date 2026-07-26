@@ -8,9 +8,11 @@ A meta-agent system that designs and generates production-ready multi-agent swar
 
 You describe what you need. SwarmForge researches the domain, architects the agent hierarchy, writes every prompt and config file, validates the topology, and delivers a working swarm — ready to run with `agy`.
 
+> Sister project of [HiveSmith](https://github.com/Sh3rm/HiveSmith) (the Claude Code edition): same architecture, same 19 agents, same 7-step pipeline — built on Antigravity's native primitives: custom agents, auto-loaded rules, workflows, and MCP config.
+
 ## How It Works
 
-SwarmForge is itself a swarm. An orchestrator coordinates 19 specialized sub-agents through a 7-step pipeline:
+SwarmForge is itself a swarm. An orchestrator coordinates 19 specialized sub-agents through a 7-step pipeline (also invocable as the `/forge-swarm` workflow):
 
 ```
 1. Information Gathering    — Fetch live model list, spawn domain researchers in parallel
@@ -18,7 +20,7 @@ SwarmForge is itself a swarm. An orchestrator coordinates 19 specialized sub-age
 3. Architecture             — Design the swarm blueprint with benchmark-driven model routing
 4. Infrastructure & Safety  — Generate MCP configs, safety rules, telemetry, custom tools
 5. Context Optimization     — Compress the payload without losing architectural logic
-6. Persona Generation       — Write all AGENTS.md and SKILL.md files to disk
+6. Persona Generation       — Write the target AGENTS.md, .agents/agents/*.md, rules, workflows
 7. Evaluation & QA          — Simulate edge cases, validate DAG topology, verify dependencies
 ```
 
@@ -26,43 +28,49 @@ If QA or DAG validation finds issues, the pipeline loops back for refinement aut
 
 ## Key Design Decisions
 
-- **Dynamic Model Routing.** SwarmForge runs `agy models` at the start of every job and assigns models based on live availability and current benchmarks — not hardcoded names. When Google or Anthropic ships a new model, SwarmForge picks it up on the next run without any code changes.
+- **Official Antigravity Schema.** Every persona is a real custom agent at `.agents/agents/<name>.md` with the documented frontmatter (`name`, `description`, `tools`, `model`, `subagent`, `inheritMcp`, `commandExecutionPolicy`) — so `invoke_subagent` resolves each one as a true isolated subagent. No legacy fields (`max_output_tokens`, `enable_*`, `planning-mode`): Antigravity drops or rejects them.
+
+- **Team, Not Product.** When you ask for a swarm that builds something, the generated agents are the development *team* (developer, tester, reviewer roles) — never the product's own runtime components role-playing as agents. Ghost infrastructure, template stamping, and tool-wrapper agents are detected and rejected by the evaluation phase.
+
+- **Dynamic Model Routing.** Agent frontmatter uses Antigravity's tier abstraction (`model: inherit | flash | pro`) instead of hardcoded model names, with `/effort` as the orthogonal reasoning-depth axis. SwarmForge runs `agy models` at the start of every job and verifies current benchmarks via live web search — tier names are marketing, benchmarks are truth.
+
+- **Structural Safety.** Guardrails are enforced in frontmatter, not just prose: least-privilege `tools:` allowlists, `commandExecutionPolicy: off` for agents with no business running commands, `sandbox` for the rest, and scoped MCP access via `inheritMcp`.
 
 - **Research Before Architecture.** Every generated swarm includes its own researcher agents. SwarmForge never relies on pre-trained knowledge for domain-specific decisions. It searches the web first, every time.
 
 - **Tokenless Web Search.** Uses [duckduckgo-mcp-server](https://pypi.org/project/duckduckgo-mcp-server/) via `uvx`. No API keys, no rate limits, no cost.
 
-- **Strict QA.** The `qa-validator` checks YAML frontmatter schemas, verifies model names against the live model list, runs dependency pre-flights (`uv`, `npx`), and validates directory structure before anything ships.
+- **Strict QA.** The `qa-validator` checks frontmatter schemas against the official Antigravity spec, detects template stamping and unfilled variables, audits MCP scope (no `/`-rooted filesystem servers, no unverified packages), runs dependency pre-flights (`uv`, `npx`), and validates directory structure before anything ships. The `dag-validator` additionally enforces acyclicity, reachability, the 10-level subagent nesting cap, and verified tool identifiers.
 
 ## Agent Roster
 
-| Agent | Role | Default Tier |
+| Agent | Role | Tier |
 |---|---|---|
-| `domain-architect` | Designs swarm topology with benchmark-driven model selection | Pro / High |
-| `persona-engineer` | Writes all system prompts (AGENTS.md, SKILL.md) | Pro / High |
-| `prompt-evaluator` | Simulates edge cases against generated prompts | Pro / High |
-| `safety-engineer` | Generates domain-specific safety rules | Pro / High |
-| `tool-smith` | Builds custom scripts when standard MCP tools aren't enough | Pro / High |
-| `memory-manager` | Designs shared context and persistence layers | Pro / High |
-| `context-optimizer` | Compresses payloads without losing architectural logic | Flash / High |
-| `mcp-integrator` | Generates `mcp_config.json` for the target swarm | Flash / High |
-| `telemetry-architect` | Designs logging, tracing, and metrics standards | Flash / Medium |
-| `researcher-google-cloud` | Google Cloud, Gemini, Antigravity best practices | Flash / Medium |
-| `researcher-anthropic-openai` | Anthropic & OpenAI multi-agent patterns | Flash / Medium |
-| `researcher-tech-stack` | Version verification, deprecation checks | Flash / Medium |
-| `researcher-security` | OWASP, HITL, guardrail best practices | Flash / Medium |
-| `researcher-academic-independent` | arXiv, independent AI research blogs | Flash / Medium |
-| `researcher-vcs-github` | Mines GitHub/GitLab for existing agent configs | Flash / Medium |
-| `researcher-synthesizer` | Merges all research into a single baseline | Pro / High |
-| `dag-validator` | Validates swarm topology — detects cycles, orphan skills, broken links | Flash / High |
-| `repo-analyzer-worker` | Fast concurrent scanning of cloned repos | Flash / Low |
-| `qa-validator` | Schema validation, dependency checks, pass/fail reporting | Flash / Low |
+| `domain-architect` | Designs swarm topology with benchmark-driven model selection | inherit |
+| `persona-engineer` | Writes all system prompts (AGENTS.md, .agents/agents/*.md) | inherit |
+| `prompt-evaluator` | Simulates edge cases; ghost-infrastructure & roster-alignment scans | inherit |
+| `safety-engineer` | Generates domain-specific safety rules | inherit |
+| `tool-smith` | Builds custom scripts when standard MCP tools aren't enough | inherit |
+| `memory-manager` | Designs shared context and persistence layers | inherit |
+| `context-optimizer` | Compresses payloads without losing architectural logic | inherit |
+| `mcp-integrator` | Generates `mcp_config.json` for the target swarm | inherit |
+| `telemetry-architect` | Designs logging, tracing, and metrics standards | inherit |
+| `researcher-google-cloud` | Google Cloud, Gemini, Antigravity best practices | inherit |
+| `researcher-anthropic-openai` | Anthropic & OpenAI multi-agent patterns | inherit |
+| `researcher-tech-stack` | Version verification, deprecation checks | inherit |
+| `researcher-security` | OWASP, HITL, guardrail best practices | inherit |
+| `researcher-academic-independent` | arXiv, independent AI research blogs | inherit |
+| `researcher-vcs-github` | Mines GitHub/GitLab for existing agent configs; clones repos | inherit |
+| `researcher-synthesizer` | Merges all research into a single baseline | inherit |
+| `dag-validator` | Validates swarm topology — cycles, orphans, nesting cap, tool identifiers | inherit |
+| `repo-analyzer-worker` | Fast concurrent scanning of cloned repos | flash |
+| `qa-validator` | Schema validation, stamping detection, MCP audit, pass/fail reporting | inherit |
 
-> "Default Tier" is a fallback. The orchestrator overrides these at runtime based on the live `agy models` list.
+> SwarmForge's own roster is deliberately generously tiered (`inherit` = the orchestrator's top model): it is a creator, and output quality outranks token savings. Cost-aware tiering applies to the swarms it *generates*. Reasoning depth is tuned per delegation via `/effort`.
 
 ## 🚀 Quick Start
 
-SwarmForge is powered by the [Antigravity (`agy`)](https://antigravity.google) engine.
+SwarmForge is powered by the [Antigravity (`agy`)](https://antigravity.google) engine (CLI v1.1.6+ required for markdown custom agents).
 
 **1. Prerequisites:**
 
@@ -96,20 +104,44 @@ Open `.agents/mcp_config.json` and change the path to your own projects director
 agy "Build me a Kubernetes monitoring swarm with Prometheus and Grafana integration"
 ```
 
-That's it. SwarmForge will research the domain, architect the agent hierarchy, write every prompt and config file, validate the output, and deliver a working swarm into your target directory.
+Or invoke the pipeline explicitly as a workflow:
 
-> **Model configuration is automatic.** The `model` fields in skill files are fallback defaults. At runtime, the orchestrator runs `agy models`, reads the output, and dynamically assigns the best available model to each sub-agent based on task complexity. You don't need to edit model names manually.
+```bash
+agy "/forge-swarm Build me a Kubernetes monitoring swarm with Prometheus and Grafana integration"
+```
+
+That's it. SwarmForge will research the domain, architect the agent hierarchy, write every prompt and config file, validate the output, and deliver a working swarm into your target directory.
 
 ## Project Structure
 
 ```
 SwarmForge/
-├── AGENTS.md                          # Orchestrator system prompt
+├── AGENTS.md                          # Orchestrator system prompt (plain markdown)
 ├── README.md
 ├── .gitignore
 └── .agents/
     ├── mcp_config.json                # MCP server configurations
-    ├── rules/
+    ├── agents/                        # 19 sub-agent personas (official custom-agent format)
+    │   ├── context-optimizer.md
+    │   ├── dag-validator.md
+    │   ├── domain-architect.md
+    │   ├── mcp-integrator.md
+    │   ├── memory-manager.md
+    │   ├── persona-engineer.md
+    │   ├── prompt-evaluator.md
+    │   ├── qa-validator.md
+    │   ├── repo-analyzer-worker.md
+    │   ├── researcher-academic-independent.md
+    │   ├── researcher-anthropic-openai.md
+    │   ├── researcher-google-cloud.md
+    │   ├── researcher-security.md
+    │   ├── researcher-synthesizer.md
+    │   ├── researcher-tech-stack.md
+    │   ├── researcher-vcs-github.md
+    │   ├── safety-engineer.md
+    │   ├── telemetry-architect.md
+    │   └── tool-smith.md
+    ├── rules/                         # Auto-loaded global rules (trigger-scoped)
     │   ├── 01-web-search-mandatory.md
     │   ├── 02-destructive-action-barrier.md
     │   ├── 03-agent-as-code-standard.md
@@ -118,38 +150,20 @@ SwarmForge/
     │   ├── 06-human-in-the-loop.md
     │   ├── 07-conflict-resolution.md
     │   └── 08-blueprint-schema.md
-    └── skills/
-        ├── context-optimizer/
-        ├── dag-validator/
-        ├── domain-architect/
-        ├── mcp-integrator/
-        ├── memory-manager/
-        ├── persona-engineer/
-        ├── prompt-evaluator/
-        ├── qa-validator/
-        ├── repo-analyzer-worker/
-        ├── researcher-academic-independent/
-        ├── researcher-anthropic-openai/
-        ├── researcher-google-cloud/
-        ├── researcher-security/
-        ├── researcher-synthesizer/
-        ├── researcher-tech-stack/
-        ├── researcher-vcs-github/
-        ├── safety-engineer/
-        ├── telemetry-architect/
-        └── tool-smith/
+    └── workflows/
+        └── forge-swarm.md             # The 7-step pipeline as an invocable /forge-swarm workflow
 ```
 
 ## Global Rules
 
-All agents (both SwarmForge's own and any it generates) operate under 8 global rules:
+All agents (both SwarmForge's own and any it generates) operate under 8 global rules. Safety-critical rules are `always_on`; the rest activate via `model_decision` to keep context lean:
 
-1. **Web Search Mandatory** — No hallucinated packages, versions, or configs
-2. **Destructive Action Barrier** — No `rm -rf`, `DROP TABLE`, or cloud deletions without human approval
-3. **Agent-as-Code Standard** — Strict YAML frontmatter, directory topology, dynamic model routing
-4. **Prompt Injection Shield** — All external inputs treated as untrusted
+1. **Web Search Mandatory** *(always on)* — No hallucinated packages, versions, or configs
+2. **Destructive Action Barrier** *(always on)* — No `rm -rf`, `DROP TABLE`, or cloud deletions without human approval; enforced structurally via `commandExecutionPolicy`
+3. **Agent-as-Code Standard** — Official Antigravity file formats, frontmatter schema, tier-based model routing
+4. **Prompt Injection Shield** *(always on)* — All external inputs treated as untrusted
 5. **Idempotency & State Safety** — Operations must be safe to re-run
-6. **Human-in-the-Loop** — Agents pause and ask when facing critical ambiguity
+6. **Human-in-the-Loop** — Plan Mode + Artifacts checkpoints; agents pause and ask when facing critical ambiguity
 7. **Conflict Resolution** — Orchestrator resolves inter-agent disagreements; safety wins by default
 8. **Blueprint Schema** — Enforced JSON structure for all swarm blueprints
 

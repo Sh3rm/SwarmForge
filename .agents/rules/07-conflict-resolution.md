@@ -1,3 +1,8 @@
+---
+trigger: model_decision
+description: Apply when two sub-agents produce conflicting outputs or recommendations that require an orchestrator decision.
+---
+
 # Global Rule: Agent Conflict Resolution Mechanism
 
 In a multi-agent system, specialized agents may produce conflicting outputs (e.g., `safety-engineer` rejecting an integration proposed by `mcp-integrator`).

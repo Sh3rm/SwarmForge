@@ -1,3 +1,8 @@
+---
+trigger: model_decision
+description: Apply when the domain-architect designs, outputs, or validates a swarm blueprint JSON.
+---
+
 # Global Rule: Swarm Blueprint JSON Schema
 
 To ensure perfect interoperability, the `domain-architect` MUST always output the swarm design using the following strict JSON schema.
@@ -12,7 +17,7 @@ To ensure perfect interoperability, the `domain-architect` MUST always output th
     {
       "id": "string",
       "role": "string",
-      "tier": "string (e.g., 'flash-high', 'flash-medium', 'flash-low')",
+      "tier": "string ('inherit', 'flash', or 'pro' — Antigravity tier abstraction, never full model slugs)",
       "model": "string",
       "tools_required": ["string"],
       "dependencies": ["string"]

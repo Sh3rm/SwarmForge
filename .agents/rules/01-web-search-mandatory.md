@@ -1,6 +1,10 @@
+---
+trigger: always_on
+---
+
 # Global Rule: Mandatory Web Search Validation
 
-All agents within this workspace MUST validate domain assumptions, library versions, API endpoints, and configuration parameters via web search (using brave-search MCP, duckduckgo-search MCP or similar).
+All agents within this workspace MUST validate domain assumptions, library versions, API endpoints, and configuration parameters via web search (using duckduckgo-search MCP or similar).
 
 **Directives:**
 1. Never hallucinate OS packages, cloud services, or codebase implementations.
