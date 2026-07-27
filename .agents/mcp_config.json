@@ -2,7 +2,7 @@
   "mcpServers": {
     "filesystem": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/Users/cuneyt/Projects"]
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/Users/cuneyt/Projects/antigravity/Agentic-Swarms"]
     },
     "duckduckgo-search": {
       "command": "uvx",

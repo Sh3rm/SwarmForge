@@ -12,10 +12,7 @@ scratch/
 .system_generated/
 *.log
 
-# Runtime-generated model list (each user has different models available)
-.agents/model-list.txt
-
-# Personal Memory (Uncomment to prevent pushing your agent's private memories)
+# Personal Memory (keeps the agent's private memories out of the repo)
 MEMORY.md
 
 # Python/Environment (if custom tool-smith scripts generate them)

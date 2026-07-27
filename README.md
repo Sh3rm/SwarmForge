@@ -8,19 +8,20 @@ A meta-agent system that designs and generates production-ready multi-agent swar
 
 You describe what you need. SwarmForge researches the domain, architects the agent hierarchy, writes every prompt and config file, validates the topology, and delivers a working swarm — ready to run with `agy`.
 
-> Sister project of [HiveSmith](https://github.com/Sh3rm/HiveSmith) (the Claude Code edition): same architecture, same 19 agents, same 7-step pipeline — built on Antigravity's native primitives: custom agents, auto-loaded rules, workflows, and MCP config.
+> Sister project of [HiveSmith](https://github.com/Sh3rm/HiveSmith) (the Claude Code edition): same architecture, same 19 agents, same pipeline — built on Antigravity's native primitives: custom agents, auto-loaded rules, workflows, and MCP config.
 
 ## How It Works
 
-SwarmForge is itself a swarm. An orchestrator coordinates 19 specialized sub-agents through a 7-step pipeline (also invocable as the `/forge-swarm` workflow):
+SwarmForge is itself a swarm. An orchestrator coordinates 19 specialized sub-agents through an interactive pre-flight step plus a 7-step pipeline. A plain natural-language request is the primary way to use it; `/forge-swarm` is an optional shortcut for the same pipeline:
 
 ```
-1. Information Gathering    — Fetch live model list, spawn domain researchers in parallel
+0. Pre-Flight Disambiguation — Challenge vague requests with clarifying questions (skipped when the request is explicit)
+1. Information Gathering    — Spawn domain researchers in parallel (incl. live model-benchmark verification)
 2. Synthesis                — Merge raw research into a unified architectural baseline
 3. Architecture             — Design the swarm blueprint with benchmark-driven model routing
 4. Infrastructure & Safety  — Generate MCP configs, safety rules, telemetry, custom tools
 5. Context Optimization     — Compress the payload without losing architectural logic
-6. Persona Generation       — Write the target AGENTS.md, .agents/agents/*.md, rules, workflows
+6. Persona Generation       — Write the target AGENTS.md, .agents/agents/*, rules, workflows
 7. Evaluation & QA          — Simulate edge cases, validate DAG topology, verify dependencies
 ```
 
@@ -32,7 +33,7 @@ If QA or DAG validation finds issues, the pipeline loops back for refinement aut
 
 - **Team, Not Product.** When you ask for a swarm that builds something, the generated agents are the development *team* (developer, tester, reviewer roles) — never the product's own runtime components role-playing as agents. Ghost infrastructure, template stamping, and tool-wrapper agents are detected and rejected by the evaluation phase.
 
-- **Dynamic Model Routing.** Agent frontmatter uses Antigravity's tier abstraction (`model: inherit | flash | pro`) instead of hardcoded model names, with `/effort` as the orthogonal reasoning-depth axis. The live roster comes from `.agents/model-list.txt` (operator-generated — see Quick Start) and current benchmarks are verified via live web search at the start of every job — tier names are marketing, benchmarks are truth.
+- **Dynamic Model Routing.** Agent frontmatter uses Antigravity's tier abstraction (`model: inherit | flash | pro`) instead of hardcoded model names, with `/effort` as the orthogonal reasoning-depth axis. Alias→model resolution happens inside Antigravity at runtime, per user — no model roster file is needed, and the orchestrator never runs `agy` subcommands (nested `agy` crashes in the sandbox). Current benchmarks are verified via live web search at the start of every job — tier names are marketing, benchmarks are truth.
 
 - **Structural Safety.** Guardrails are enforced in frontmatter, not just prose: least-privilege `tools:` allowlists, `commandExecutionPolicy: off` for agents with no business running commands, `sandbox` for the rest, and scoped MCP access via `inheritMcp`.
 
@@ -70,7 +71,7 @@ If QA or DAG validation finds issues, the pipeline loops back for refinement aut
 
 ## 🚀 Quick Start
 
-SwarmForge is powered by the [Antigravity (`agy`)](https://antigravity.google) engine (CLI v1.1.6+ required for markdown custom agents).
+SwarmForge is powered by the [Antigravity (`agy`)](https://antigravity.google) engine (CLI v1.1.7+ — markdown custom agents; note v1.1.7's breaking change: `subagent: false` agents no longer resolve as subagents).
 
 **1. Prerequisites:**
 
@@ -87,26 +88,20 @@ cd SwarmForge
 
 **3. Configure filesystem access:**
 
-Open `.agents/mcp_config.json` and change the path to your own projects directory:
+Open `.agents/mcp_config.json` and change the path to the parent directory where your generated swarms should live:
 
 ```json
 "filesystem": {
   "command": "npx",
-  "args": ["-y", "@modelcontextprotocol/server-filesystem", "/your/projects/path"]
+  "args": ["-y", "@modelcontextprotocol/server-filesystem", "/your/swarms/parent/path"]
 }
 ```
 
-> ⚠️ Do not set this to `/` or `C:\`. This path defines where AI agents can read and write files.
+> ⚠️ Do not set this to `/`, `~`, or `C:\`. This path defines where AI agents can read and write files.
+>
+> **Why does SwarmForge ship a filesystem server when its own doctrine forbids native-duplicating MCP servers?** Deliberate, documented exception: generated swarms are written into *sibling* directories outside SwarmForge's own workspace, which Antigravity's native file tools cannot reach. Scope it as narrowly as possible — the parent folder of your target swarm directories, nothing wider. Generated swarms themselves never receive a filesystem server.
 
-**4. Generate your model roster (required before each session where your model lineup may have changed):**
-
-```bash
-agy models < /dev/null > .agents/model-list.txt
-```
-
-> This must run in your own terminal, **outside** an agy session. The orchestrator reads this file because nested `agy` invocations crash inside Antigravity's command sandbox. The file is gitignored — every user has a different model lineup.
-
-**5. Boot the swarm:**
+**4. Boot the swarm:**
 
 ```bash
 agy "Build me a Kubernetes monitoring swarm with Prometheus and Grafana integration"
@@ -126,6 +121,7 @@ That's it. SwarmForge will research the domain, architect the agent hierarchy, w
 SwarmForge/
 ├── AGENTS.md                          # Orchestrator system prompt (plain markdown)
 ├── README.md
+├── LICENSE
 ├── .gitignore
 └── .agents/
     ├── mcp_config.json                # MCP server configurations
@@ -149,7 +145,7 @@ SwarmForge/
     │   ├── safety-engineer.md
     │   ├── telemetry-architect.md
     │   └── tool-smith.md
-    ├── rules/                         # Auto-loaded global rules (trigger-scoped)
+    ├── rules/                         # Auto-loaded global rules (always-on = frontmatter-free)
     │   ├── 01-web-search-mandatory.md
     │   ├── 02-destructive-action-barrier.md
     │   ├── 03-agent-as-code-standard.md
@@ -159,12 +155,12 @@ SwarmForge/
     │   ├── 07-conflict-resolution.md
     │   └── 08-blueprint-schema.md
     └── workflows/
-        └── forge-swarm.md             # The 7-step pipeline as an invocable /forge-swarm workflow
+        └── forge-swarm.md             # The Step 0-7 pipeline as an invocable /forge-swarm shortcut
 ```
 
 ## Global Rules
 
-All agents (both SwarmForge's own and any it generates) operate under 8 global rules. Safety-critical rules are `always_on`; the rest activate via `model_decision` to keep context lean:
+All agents (both SwarmForge's own and any it generates) operate under 8 global rules. Safety-critical rules are always-on (frontmatter-free files auto-load as always-on — the officially corroborated form); the rest activate via `trigger: model_decision` to keep context lean:
 
 1. **Web Search Mandatory** *(always on)* — No hallucinated packages, versions, or configs
 2. **Destructive Action Barrier** *(always on)* — No `rm -rf`, `DROP TABLE`, or cloud deletions without human approval; enforced structurally via `commandExecutionPolicy`

@@ -5,7 +5,7 @@ model: inherit
 mainAgent: false
 subagent: true
 inheritMcp: false
-tools: [view_file, grep_search, replace_file_content, run_command]
+tools: [view_file, grep_search, list_dir, write_file, replace_file_content, run_command]
 commandExecutionPolicy: sandbox
 ---
 

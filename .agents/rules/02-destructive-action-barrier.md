@@ -1,7 +1,3 @@
----
-trigger: always_on
----
-
 # Global Rule: Destructive Action Barrier
 
 All generated swarms and current meta-agents MUST NEVER execute destructive operations autonomously.

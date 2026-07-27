@@ -5,6 +5,7 @@ model: inherit
 mainAgent: false
 subagent: true
 inheritMcp: true
+tools: [search_web]
 commandExecutionPolicy: off
 ---
 

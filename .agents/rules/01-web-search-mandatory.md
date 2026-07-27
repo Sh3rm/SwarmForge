@@ -1,10 +1,6 @@
----
-trigger: always_on
----
-
 # Global Rule: Mandatory Web Search Validation
 
-All agents within this workspace MUST validate domain assumptions, library versions, API endpoints, and configuration parameters via web search (using duckduckgo-search MCP or similar).
+Every agent with live search capability (native `search_web`, or an inherited search MCP such as `duckduckgo-search`) MUST validate domain assumptions, library versions, API endpoints, and configuration parameters via web search before asserting them. Agents WITHOUT search capability MUST NOT compensate by guessing — they flag the unverified claim for the Orchestrator to route to a researcher.
 
 **Directives:**
 1. Never hallucinate OS packages, cloud services, or codebase implementations.
