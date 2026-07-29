@@ -16,22 +16,26 @@ SwarmForge is itself a swarm. An orchestrator coordinates 19 specialized sub-age
 
 ```
 0. Pre-Flight Disambiguation — Challenge vague requests with clarifying questions (skipped when the request is explicit)
-1. Information Gathering    — Spawn domain researchers in parallel (incl. live model-benchmark verification)
-2. Synthesis                — Merge raw research into a unified architectural baseline
-3. Architecture             — Design the swarm blueprint with benchmark-driven model routing
-4. Infrastructure & Safety  — Generate MCP configs, safety rules, telemetry, custom tools
-5. Context Optimization     — Compress the payload without losing architectural logic
-6. Persona Generation       — Write the target AGENTS.md, .agents/agents/*, rules, workflows
-7. Evaluation & QA          — Simulate edge cases, validate DAG topology, verify dependencies
+1. Information Gathering     — Spawn domain researchers in parallel (incl. live model-benchmark verification)
+2. Synthesis & Architecture  — Merge raw research into a unified baseline, then design the blueprint
+3. Infrastructure & Safety   — Generate MCP configs, safety rules + guard hooks, telemetry, custom tools
+4. Context Optimization      — Compress the payload without losing architectural logic
+5. Persona Generation        — Write the target AGENTS.md, .agents/agents/*, rules, workflows; verify Step-3 deliverables (MCP config, guard hooks)
+6. Evaluation & QA           — Simulate edge cases, audit anti-patterns, validate DAG topology and dependencies
+7. Final Delivery            — Hand the validated swarm tree to the user as a reviewable Artifact
 ```
 
 If QA or DAG validation finds issues, the pipeline loops back for refinement automatically.
 
 ## Key Design Decisions
 
-- **Official Antigravity Schema.** Every persona is a real custom agent at `.agents/agents/<name>.md` with the documented frontmatter (`name`, `description`, `tools`, `model`, `subagent`, `inheritMcp`, `commandExecutionPolicy`) — so `invoke_subagent` resolves each one as a true isolated subagent. No legacy fields (`max_output_tokens`, `enable_*`, `planning-mode`): Antigravity drops or rejects them.
+- **Official Antigravity Schema.** Every persona is a real custom agent at `.agents/agents/<name>.md` with the documented frontmatter key set (`name`, `description`, `tools`, `model`, `mainAgent`, `subagent`, `hidden`, `inheritMcp`, `commandExecutionPolicy`, `mcpServers`, `skills`, `plugins`) — so `invoke_subagent` resolves each one as a true isolated subagent. `mainAgent: false` is always explicit (it defaults to TRUE when omitted — a field-proven trap). No legacy fields (`max_output_tokens`, `enable_*`, `planning-mode`, sampling params): Antigravity drops or rejects them.
 
-- **Team, Not Product.** When you ask for a swarm that builds something, the generated agents are the development *team* (developer, tester, reviewer roles) — never the product's own runtime components role-playing as agents. Ghost infrastructure, template stamping, and tool-wrapper agents are detected and rejected by the evaluation phase.
+- **The Generation Contract.** Workspace rules do not reliably reach subagent contexts, so every delegation to a generator or validator carries a mandatory verbatim payload: the Canonical Tool List, the required frontmatter key set, the known-good MCP registry, the quality/enforcement floor, and the user's original request text. A validator that receives a delegation without the contract refuses with `missing_contract` instead of validating blind.
+
+- **Deterministic Guard Hooks.** The Destructive Action Barrier is not just prose: a `PreToolUse` hook (`.agents/hooks.json` + `.agents/hooks/block-destructive.py`) deterministically denies `rm -rf`, `mkfs`, force-pushes, SQL `DROP`s, and cloud resource deletions at the engine layer — the model cannot override a deny. Generated swarms ship the same dual layer with a domain-tailored pattern list.
+
+- **Team, Not Product.** When you ask for a swarm that builds something, the generated agents are the development *team* (developer roles that implement AND test their own code, blackbox reviewers, docs writers) — never the product's own runtime components role-playing as agents. Ghost infrastructure, template stamping, and tool-wrapper agents are detected and rejected by the evaluation phase.
 
 - **Dynamic Model Routing.** Agent frontmatter uses Antigravity's tier abstraction (`model: inherit | flash | pro`) instead of hardcoded model names, with `/effort` as the orthogonal reasoning-depth axis. Alias→model resolution happens inside Antigravity at runtime, per user — no model roster file is needed, and the orchestrator never runs `agy` subcommands (nested `agy` crashes in the sandbox). Current benchmarks are verified via live web search at the start of every job — tier names are marketing, benchmarks are truth.
 
@@ -41,14 +45,14 @@ If QA or DAG validation finds issues, the pipeline loops back for refinement aut
 
 - **Tokenless Web Search.** Uses [duckduckgo-mcp-server](https://pypi.org/project/duckduckgo-mcp-server/) via `uvx`. No API keys, no rate limits, no cost.
 
-- **Strict QA.** The `qa-validator` checks frontmatter schemas against the official Antigravity spec, detects template stamping and unfilled variables, audits MCP scope (no `/`-rooted filesystem servers, no unverified packages), runs dependency pre-flights (`uv`, `npx`), and validates directory structure before anything ships. The `dag-validator` additionally enforces acyclicity, reachability, the 10-level subagent nesting cap, and verified tool identifiers.
+- **Strict QA.** The `qa-validator` checks frontmatter schemas against the official Antigravity spec, detects template stamping and unfilled variables, audits MCP scope (no `/`-rooted filesystem servers, no unverified packages), verifies manifesto fidelity, research capacity, environment feasibility, guard hooks (with a live smoke-test), and destructive-ops policy, runs dependency pre-flights (`uv`, `npx`), and validates directory structure before anything ships. The `prompt-evaluator` additionally audits measured anti-patterns (Rule 09): phase-chain rosters, missing single-agent justification, soft verifiers, and bloated or hollow prompts. The `dag-validator` enforces acyclicity, reachability, the 10-level subagent nesting cap, and verified tool identifiers.
 
 ## Agent Roster
 
 | Agent | Role | Tier |
 |---|---|---|
 | `domain-architect` | Designs swarm topology with benchmark-driven model selection | inherit |
-| `persona-engineer` | Writes all system prompts (AGENTS.md, .agents/agents/*.md) | inherit |
+| `persona-engineer` | Writes all system prompts (AGENTS.md, agents, rules, workflows) | inherit |
 | `prompt-evaluator` | Simulates edge cases; ghost-infrastructure & roster-alignment scans | inherit |
 | `safety-engineer` | Generates domain-specific safety rules | inherit |
 | `tool-smith` | Builds custom scripts when standard MCP tools aren't enough | inherit |
@@ -71,7 +75,7 @@ If QA or DAG validation finds issues, the pipeline loops back for refinement aut
 
 ## 🚀 Quick Start
 
-SwarmForge is powered by the [Antigravity (`agy`)](https://antigravity.google) engine (CLI v1.1.7+ — markdown custom agents; note v1.1.7's breaking change: `subagent: false` agents no longer resolve as subagents).
+SwarmForge is powered by the [Antigravity (`agy`)](https://antigravity.google) engine (CLI v1.1.8+ — markdown custom agents; note v1.1.7's breaking change: `subagent: false` agents no longer resolve as subagents; v1.1.8 changed nothing in the schema).
 
 **1. Prerequisites:**
 
@@ -125,6 +129,9 @@ SwarmForge/
 ├── .gitignore
 └── .agents/
     ├── mcp_config.json                # MCP server configurations
+    ├── hooks.json                     # PreToolUse guard-hook wiring (deterministic layer)
+    ├── hooks/
+    │   └── block-destructive.py       # PreToolUse guard: deterministic Destructive Action Barrier
     ├── agents/                        # 19 sub-agent personas (official custom-agent format)
     │   ├── context-optimizer.md
     │   ├── dag-validator.md
@@ -153,23 +160,25 @@ SwarmForge/
     │   ├── 05-idempotency-and-state.md
     │   ├── 06-human-in-the-loop.md
     │   ├── 07-conflict-resolution.md
-    │   └── 08-blueprint-schema.md
+    │   ├── 08-blueprint-schema.md
+    │   └── 09-swarm-quality-doctrine.md
     └── workflows/
         └── forge-swarm.md             # The Step 0-7 pipeline as an invocable /forge-swarm shortcut
 ```
 
 ## Global Rules
 
-All agents (both SwarmForge's own and any it generates) operate under 8 global rules. Safety-critical rules are always-on (frontmatter-free files auto-load as always-on — the officially corroborated form); the rest activate via `trigger: model_decision` to keep context lean:
+All agents (both SwarmForge's own and any it generates) operate under 9 global rules. Safety-critical rules are always-on (frontmatter-free files auto-load as always-on); the rest activate via `trigger: model_decision` to keep context lean — and every rule stays under Antigravity's 12,000-character limit:
 
 1. **Web Search Mandatory** *(always on)* — No hallucinated packages, versions, or configs
-2. **Destructive Action Barrier** *(always on)* — No `rm -rf`, `DROP TABLE`, or cloud deletions without human approval; enforced structurally via `commandExecutionPolicy`
-3. **Agent-as-Code Standard** — Official Antigravity file formats, frontmatter schema, tier-based model routing
+2. **Destructive Action Barrier** *(always on)* — No `rm -rf`, `DROP TABLE`, or cloud deletions without human approval; enforced by a deterministic `PreToolUse` deny hook plus `commandExecutionPolicy`, not just prose
+3. **Agent-as-Code Standard** — Official Antigravity file formats, frontmatter schema, hooks doctrine, tier-based model routing
 4. **Prompt Injection Shield** *(always on)* — All external inputs treated as untrusted
 5. **Idempotency & State Safety** — Operations must be safe to re-run
 6. **Human-in-the-Loop** — Plan Mode + Artifacts checkpoints; agents pause and ask when facing critical ambiguity
 7. **Conflict Resolution** — Orchestrator resolves inter-agent disagreements; safety wins by default
-8. **Blueprint Schema** — Enforced JSON structure for all swarm blueprints
+8. **Blueprint Schema** — Enforced JSON structure for all swarm blueprints, including decomposition justification, tier evidence, and guard-hook sections
+9. **Swarm Quality Doctrine** — Measured anti-patterns encoded as hard checks: single-agent justification, context-boundary (not phase) decomposition, density-not-mass prompt budgets, verifier hardening, just-in-time context
 
 ## Contributing
 

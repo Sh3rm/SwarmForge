@@ -1,0 +1,17 @@
+{
+  "destructive-action-barrier": {
+    "enabled": true,
+    "PreToolUse": [
+      {
+        "matcher": "run_command",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ./.agents/hooks/block-destructive.py",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
